@@ -38,14 +38,12 @@ jupyter:
 		--name jupyter_pyspark \
 		--restart always \
 		-e GRANT_SUDO=yes \
-		-d jupyter/pyspark-notebook
-
+		-d docker pull jupyter/pyspark-notebook:x86_64-spark-3.5.0
 jupyter_token:
-	@docker logs jupyter_pyspark 2>&1 | grep '\?token\=' -m 1 | cut -d '=' -f2
+	@docker logs jupyter_pyspark 2>&1 | findstr '\?token\='
 
 unpack_data:
-	unzip files/data/2019-03.zip -d /tmp/crimes_csv
-
+	cp .\files\data\subscribers.csv /tmp
 down:
 	docker compose down
 	docker stop jupyter_pyspark
